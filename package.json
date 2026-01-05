@@ -1,16 +1,15 @@
 {
   "name": "vulcain",
   "version": "1.0.0",
-  "description": "",
+  "description": "VULCAIN Trend Intelligence Engine",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npx prisma generate && tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.{ts,js}",
-    "prepare": "husky",
     "postinstall": "prisma generate"
   },
   "lint-staged": {
