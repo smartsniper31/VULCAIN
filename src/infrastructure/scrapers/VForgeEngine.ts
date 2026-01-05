@@ -9,6 +9,9 @@ export class VForgeEngine {
     console.log(pc.blue('🔥 Starting V-Forge Engine cycle...'));
 
     try {
+      // Add delay to appear more human-like
+      await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
+
       // Fetch trending data from Google Trends
       const trendsData = await googleTrends.dailyTrends({
         trendDate: new Date(),

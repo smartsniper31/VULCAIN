@@ -16,6 +16,11 @@ app.use(express.json());
 // Routes
 app.use('/api', trendsRoutes);
 
+// Routes
+app.get('/', (req, res) => {
+  res.json({ status: 'VULCAIN Online', message: 'Forge is active' });
+});
+
 // Initialize and start the V-Forge Engine
 const forgeEngine = new VForgeEngine();
 forgeEngine.startAutomatedForge();
