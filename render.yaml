@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: vulcain-backend
+    runtime: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        value: file:/data/vulcain_core.db
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+    persistentDisk:
+      name: vulcain-data
+      mountPath: /data
+      sizeGB: 1

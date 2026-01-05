@@ -1,0 +1,61 @@
+{
+  "name": "vulcain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src/**/*.{ts,js}",
+    "prepare": "husky",
+    "postinstall": "prisma generate"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "_moduleAliases": {
+    "@domain": "dist/domain",
+    "@infrastructure": "dist/infrastructure",
+    "@application": "dist/application",
+    "@interfaces": "dist/interfaces"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.2.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/sqlite3": "^3.1.11",
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "google-trends-api": "^4.9.2",
+    "jsonwebtoken": "^9.0.3",
+    "module-alias": "^2.2.3",
+    "node-cron": "^4.2.1",
+    "picocolors": "^1.1.1",
+    "prisma": "^7.2.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "zod": "^4.3.4"
+  }
+}

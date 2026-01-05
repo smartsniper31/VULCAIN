@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String
+  name        String
+  role        Role     @default(USER)
+  preferences Json?
+  favorites   Favorite[]
+
+  @@map("users")
+}
+
+model Trend {
+  id           String     @id @default(uuid())
+  slug         String     @unique
+  title        String     @unique
+  description  String
+  searchVolume Int
+  growthRate   Float
+  imageUrl     String?
+  sourceUrl    String
+  isHot        Boolean    @default(false)
+  category     String
+  metadata     Json
+  createdAt    DateTime   @default(now())
+  favorites    Favorite[]
+
+  @@index([createdAt])
+  @@map("trends")
+}
+
+model Favorite {
+  id      String @id @default(uuid())
+  userId  String
+  trendId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trend   Trend  @relation(fields: [trendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trendId])
+  @@map("favorites")
+}
