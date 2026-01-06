@@ -1,6 +1,7 @@
 require('module-alias/register');
 
 import express from 'express';
+import cors from 'cors';
 import { VForgeEngine } from './infrastructure/scrapers/VForgeEngine';
 import trendsRoutes from './interfaces/http/routes/trends.routes';
 
@@ -11,10 +12,19 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*', // Allow frontend URL from env or all for dev
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
 app.use('/api', trendsRoutes);
+
+// Health check route
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
 
 // Routes
 app.get('/', (req, res) => {

@@ -12,10 +12,14 @@ export class VForgeEngine {
       // Add delay to appear more human-like
       await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second delay
 
-      // Fetch trending data from Google Trends
+      // Fetch trending data from Google Trends with User-Agent
       const trendsData = await googleTrends.dailyTrends({
         trendDate: new Date(),
         geo: 'FR', // Focus on France for now
+      }, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
       });
 
       const parsedData = JSON.parse(trendsData);

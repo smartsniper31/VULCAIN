@@ -1,18 +1,23 @@
-# VULCAIN Render.com Deployment Preparation
+# TODO: Fix Full-Stack Communication for VULCAIN
 
-## Pending Tasks
-- [x] Refactor prisma.provider.ts to use dynamic DATABASE_URL from env, defaulting to file:./dev.db for dev
-- [x] Update package.json scripts: Change "start" to "node dist/index.js", add "postinstall": "prisma generate"
-- [x] Handle path aliases: Install module-alias, add require('module-alias/register') to index.ts, update _moduleAliases in package.json
-- [x] Modify VForgeEngine.ts: Add DATABASE_URL check, log startup message, prevent scraping if not set
-- [x] Ensure index.ts listens on correct port: Already does process.env.PORT || 3001
-- [x] Create render.yaml: Web service with persistent disk at /data, env vars DATABASE_URL=file:/data/vulcain.db, PORT=3001
-- [x] Verify health check: /api/trends already returns 200 with empty data array if no trends
-- [x] Separate devDependencies: Already separated (tsx, ts-node in devDeps)
-- [x] Ensure /data permissions: Dockerfile already creates /data and sets permissions
+## Backend Fixes
+- [x] Add CORS middleware in src/index.ts to accept frontend URL from Render
+- [x] Add health route at /health in src/index.ts
+- [x] Add User-Agent header in VForgeEngine.ts for Google Trends scraping to avoid 500 error
 
-## Followup Steps
-- [x] Install module-alias dependency
-- [x] Test build and start scripts
-- [x] Verify Prisma migrations run in production (handled by postinstall: prisma generate)
-- [x] Confirm health check endpoint works (GET /api/trends returns 200 with empty data if no trends)
+## Frontend Fixes
+- [x] Verify API calls use absolute URLs with NEXT_PUBLIC_API_URL (already done)
+- [x] Ensure next.config.ts has no rewrites (already done)
+- [x] Handle empty trends array in page.tsx (already done)
+- [ ] Set NEXT_PUBLIC_API_URL environment variable on Vercel to point to Render backend URL
+- [ ] Set FRONTEND_URL environment variable on Render to Vercel frontend URL for CORS
+
+## Deployment Fixes
+- [ ] Ensure Render backend is deployed and accessible
+- [ ] Verify Render service is running on the correct port (uses PORT env var)
+- [ ] Check if database migrations are run on Render (prisma generate and migrate)
+
+## Validation
+- [ ] Test backend health endpoint
+- [ ] Test /api/trends endpoint
+- [ ] Deploy and verify communication
