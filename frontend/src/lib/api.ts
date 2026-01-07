@@ -1,4 +1,10 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_BASE_URL) {
+  console.warn(
+    'Warning: NEXT_PUBLIC_API_URL is not set. API calls will be disabled.'
+  );
+}
 
 export interface Trend {
   id: string;
@@ -26,7 +32,16 @@ export interface TrendsResponse {
 }
 
 export const fetchTrends = async (page = 1, limit = 10): Promise<TrendsResponse> => {
-  const response = await fetch(`${API_BASE_URL}/api/trends?page=${page}&limit=${limit}&sortBy=searchVolume&sortOrder=desc`);
+  if (!API_BASE_URL) {
+    throw new Error('API URL is not configured. Please set NEXT_PUBLIC_API_URL.');
+  }
+
+  const response = await fetch(`${API_BASE_URL}/api/trends?page=${page}&limit=${limit}&sortBy=searchVolume&sortOrder=desc`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
   if (!response.ok) {
     throw new Error('Failed to fetch trends');
   }
