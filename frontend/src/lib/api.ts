@@ -1,10 +1,11 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+// On définit l'URL de secours au cas où Render ne l'injecterait pas
+const FALLBACK_BACKEND_URL = "https://vulcain-backend.onrender.com"; 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || FALLBACK_BACKEND_URL;
 
-if (!API_BASE_URL) {
-  console.warn(
-    'Warning: NEXT_PUBLIC_API_URL is not set. API calls will be disabled.'
-  );
-}
+// Nettoyage de l'URL pour éviter les doubles slashs (ex: ...com//api/trends)
+const CLEAN_BASE_URL = API_BASE_URL.replace(/\/$/, '');
+
+console.log("🛠️ VULCAIN DEBUG: Connexion établie vers ->", CLEAN_BASE_URL);
 
 export interface Trend {
   id: string;
@@ -32,18 +33,26 @@ export interface TrendsResponse {
 }
 
 export const fetchTrends = async (page = 1, limit = 10): Promise<TrendsResponse> => {
-  if (!API_BASE_URL) {
-    throw new Error('API URL is not configured. Please set NEXT_PUBLIC_API_URL.');
-  }
+  // Construction de l'URL absolue
+  const targetUrl = `${CLEAN_BASE_URL}/api/trends?page=${page}&limit=${limit}&sortBy=searchVolume&sortOrder=desc`;
 
-  const response = await fetch(`${API_BASE_URL}/api/trends?page=${page}&limit=${limit}&sortBy=searchVolume&sortOrder=desc`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const response = await fetch(targetUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch trends');
+    if (!response.ok) {
+      const errorMsg = `Erreur HTTP: ${response.status}`;
+      console.error("❌ Problème Backend:", errorMsg);
+      throw new Error(errorMsg);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("❌ Échec de la requête API:", error);
+    throw error;
   }
-  return response.json();
 };
