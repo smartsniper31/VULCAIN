@@ -11,12 +11,11 @@ console.log('VULCAIN Trend Intelligence Engine is starting...');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
 // Middleware
 app.use(cors({
-  origin: [
-    'https://vulcain.onrender.com', // Votre URL de frontend
-    'http://localhost:3000'         // Pour vos tests locaux
-  ],
+  origin: frontendUrl,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
