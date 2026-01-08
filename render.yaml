@@ -1,7 +1,8 @@
 services:
+  # --- Service Backend (existant, inchangé) ---
   - type: web
     name: vulcain-backend
-    runtime: node # Correction : utilise 'runtime' au lieu de 'env'
+    runtime: node
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm run start
     envVars:
@@ -11,7 +12,28 @@ services:
         value: 3001
       - key: NODE_ENV
         value: production
-    disk: # Le champ correct est 'disk'
+      # On expose l'URL du frontend au backend pour les CORS
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: vulcain-frontend
+          property: url
+    disk:
       name: vulcain-data
       mountPath: /data
       sizeGB: 1
+
+  # --- Service Frontend (NOUVEAU) ---
+  - type: web
+    name: vulcain-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile.frontend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # On injecte l'URL du backend dans le frontend
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: vulcain-backend
+          property: url
