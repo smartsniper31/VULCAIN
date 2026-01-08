@@ -14,18 +14,15 @@ const PORT = process.env.PORT || 3001;
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // Middleware
-const whitelist = [process.env.FRONTEND_URL, 'http://localhost:3000'].filter(Boolean);
-app.use(cors({
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin!) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-}));
+const corsOptions = {
+  origin: 'https://vulcain.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+
 app.use(express.json());
 
 // Routes
