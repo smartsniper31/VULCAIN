@@ -52,6 +52,7 @@
     "google-trends-api": "^4.9.2",
     "jsonwebtoken": "^9.0.3",
     "module-alias": "^2.2.3",
+    "next": "^16.1.1",
     "node-cron": "^4.2.1",
     "picocolors": "^1.1.1",
     "prisma": "^7.2.0",
