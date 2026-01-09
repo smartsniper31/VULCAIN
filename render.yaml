@@ -29,7 +29,7 @@ services:
     runtime: node
     root: frontend
     buildCommand: npm install && npm run build
-    startCommand: node .next/standalone/server.js
+    startCommand: node frontend/.next/standalone/server.js
     healthCheckPath: /
     plan: free
     envVars:
