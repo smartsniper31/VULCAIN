@@ -23,11 +23,15 @@ services:
       mountPath: /data
       sizeGB: 1
 
-  # --- Service Frontend (NOUVEAU) ---
+  # --- Service Frontend (Node runtime) ---
   - type: web
     name: vulcain-frontend
-    runtime: docker
-    dockerfilePath: ./frontend/Dockerfile.frontend
+    runtime: node
+    root: frontend
+    buildCommand: npm install && npm run build
+    startCommand: PORT=$PORT node ./.next/standalone/server.js
+    healthCheckPath: /
+    plan: free
     envVars:
       - key: NODE_ENV
         value: production

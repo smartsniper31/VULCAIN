@@ -13,10 +13,13 @@ Services in `render.yaml`
   - Disk mount: `/data` (SQLite file location)
   - Important: Do NOT hardcode `PORT` in env vars; Render provides `$PORT` at runtime.
 
-- `vulcain-frontend` (Docker service)
-  - Runtime: `docker`
-  - Dockerfile: `frontend/Dockerfile.frontend`
-  - The frontend Dockerfile should build Next.js and output a runnable image. If you prefer Node runtime, change to `env: node`, `root: frontend`, and set build/start commands.
+- `vulcain-frontend` (Node service)
+  - Runtime: `node`
+  - Root: `frontend`
+  - Build command: `npm install && npm run build`
+  - Start command: `PORT=$PORT node ./.next/standalone/server.js` (respects Render's allocated PORT)
+  - Health check: `/`
+  - The Next.js standalone server will listen on the port Render provides via `$PORT`.
 
 Required secrets / env vars (set in Render Environment):
 
