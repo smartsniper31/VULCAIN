@@ -3,11 +3,11 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  // Cette option remplace `outputFileTracingRoot` avec Turbopack.
-  // Elle indique à Next.js de considérer la racine du projet (le dossier VULCAIN)
-  // lors de la création du build "standalone", ce qui assure que les chemins sont corrects.
-  turbopack: {
-    root: path.join(__dirname, ".."),
+  experimental: {
+    // Cette option indique à Next.js où se trouve la racine de votre projet (le dossier VULCAIN).
+    // Elle est cruciale pour que le build "standalone" copie correctement les dépendances
+    // et crée un server.js fonctionnel dans une structure monorepo.
+    outputFileTracingRoot: path.join(__dirname, ".."),
   },
 };
 
