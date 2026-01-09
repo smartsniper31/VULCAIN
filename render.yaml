@@ -5,11 +5,11 @@ services:
     runtime: node
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm run start
+    healthCheckPath: /health
+    plan: free
     envVars:
       - key: DATABASE_URL
         value: file:/data/vulcain_core.db
-      - key: PORT
-        value: 3001
       - key: NODE_ENV
         value: production
       # On expose l'URL du frontend au backend pour les CORS
