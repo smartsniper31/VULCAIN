@@ -29,12 +29,14 @@ services:
     runtime: node
     root: frontend
     buildCommand: npm install && npm run build
-    startCommand: node frontend/.next/standalone/server.js
+    startCommand: node .next/standalone/server.js
     healthCheckPath: /
     plan: free
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: '1'
       # On injecte l'URL du backend dans le frontend
       - key: NEXT_PUBLIC_API_URL
         fromService:
