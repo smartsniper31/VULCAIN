@@ -15,8 +15,11 @@ const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // Middleware
 const corsOptions = {
-  origin: frontendUrl,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  origin: [
+    'https://vulcain.onrender.com',
+    'http://localhost:3000'
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 };
