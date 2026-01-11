@@ -36,13 +36,19 @@ export const fetchTrends = async (page = 1, limit = 10): Promise<TrendsResponse>
   // Construction de l'URL absolue
   const targetUrl = `${CLEAN_BASE_URL}/api/trends?page=${page}&limit=${limit}&sortBy=searchVolume&sortOrder=desc`;
 
+  // Création d'un contrôleur pour gérer le timeout (15 secondes max)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
   try {
     const response = await fetch(targetUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorMsg = `Erreur HTTP: ${response.status}`;
