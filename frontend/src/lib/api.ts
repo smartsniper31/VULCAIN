@@ -47,6 +47,7 @@ export const fetchTrends = async (page = 1, limit = 10): Promise<TrendsResponse>
         'Content-Type': 'application/json',
       },
       signal: controller.signal,
+      next: { revalidate: 60 }, // Revalidate data every 60 seconds
     });
     clearTimeout(timeoutId);
 
