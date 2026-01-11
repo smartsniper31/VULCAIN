@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-// Importez vos services/modèles ici
+import { prisma } from '../../../infrastructure/database/prisma.provider';
 
 export class TrendsController {
   
@@ -7,11 +7,15 @@ export class TrendsController {
     try {
       console.log('📥 Request received: GET /api/trends');
       
-      // Simulation de récupération de données (remplacez par votre appel DB)
-      // const trends = await TrendModel.find().sort({ searchVolume: -1 });
-      
-      // Si la DB est vide ou lente, on ne laisse pas le frontend attendre
-      const trends: any[] = []; // Remplacer par vos vraies données
+      // Récupération des tendances depuis la base de données
+      const trends = await prisma.trend.findMany({
+        orderBy: [
+          { isHot: 'desc' },
+          { searchVolume: 'desc' },
+          { createdAt: 'desc' }
+        ],
+        take: 50 // Limiter à 50 tendances pour les performances
+      });
 
       console.log(`✅ Sending ${trends.length} trends to client.`);
       
@@ -40,7 +44,32 @@ export class TrendsController {
   }
 
   static async syncTrends(req: Request, res: Response) {
-     // Même logique de try/catch ici...
-     res.status(501).json({ message: "Not implemented yet" });
+    try {
+      console.log('📥 Request received: POST /api/trends/sync');
+
+      // Importer VForgeEngine pour déclencher manuellement
+      const { VForgeEngine } = await import('../../../infrastructure/scrapers/VForgeEngine');
+      const forgeEngine = new VForgeEngine();
+
+      // Lancer la forge manuellement
+      await forgeEngine.manualForge();
+
+      console.log('✅ Manual sync completed.');
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Trends synchronized successfully',
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error: any) {
+      console.error('❌ ERROR in TrendsController.syncTrends:', error);
+
+      return res.status(500).json({
+        status: 'error',
+        message: 'Failed to sync trends',
+        debug_error: error.message
+      });
+    }
   }
 }
