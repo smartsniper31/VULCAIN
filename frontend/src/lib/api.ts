@@ -57,6 +57,14 @@ export const fetchTrends = async (page = 1, limit = 10): Promise<TrendsResponse>
       throw new Error(errorMsg);
     }
 
+    // Vérification de sécurité : S'assurer que la réponse est bien du JSON
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      console.error("❌ Le backend a renvoyé du HTML au lieu du JSON (Erreur Serveur):", text.slice(0, 200));
+      throw new Error("Le backend renvoie une page HTML (probablement une erreur 500 ou 404) au lieu des données.");
+    }
+
     return await response.json();
   } catch (error) {
     console.error("❌ Échec de la requête API:", error);
